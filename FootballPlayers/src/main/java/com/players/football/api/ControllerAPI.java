@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.players.football.dto.PlayersDTO;
+import com.players.football.exception.PlayersException;
 import com.players.football.service.ServiceDAOImpl;
 
 import jakarta.validation.Valid;
@@ -54,7 +55,7 @@ public class ControllerAPI {
 	}
 	
 	@GetMapping(value = "/player/{sqnum}", consumes = {MediaType.ALL_VALUE})
-	public ResponseEntity<PlayersDTO> getPlayers(@PathVariable Integer sqnum){
+	public ResponseEntity<PlayersDTO> getPlayers(@PathVariable Integer sqnum) throws PlayersException{
 		
 		return ResponseEntity.status(HttpStatus.OK).body(serviceDAOImpl.getPlayersServiceById(sqnum));
 		
