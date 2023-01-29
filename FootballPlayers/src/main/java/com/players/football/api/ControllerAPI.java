@@ -33,10 +33,10 @@ public class ControllerAPI {
 	@Autowired
 	private ServiceDAOImpl serviceDAOImpl;
 	
-	@PostMapping(value = "/transfer", consumes = {MediaType.ALL_VALUE})
-	public ResponseEntity<PlayersDTO> addPlayers(@Valid @RequestBody PlayersDTO playersDTO) {
+	@PostMapping(value = "/transfer/{id}", consumes = {MediaType.ALL_VALUE})
+	public ResponseEntity<PlayersDTO> addPlayers(@Valid @PathVariable("id") Integer id, @RequestBody PlayersDTO playersDTO) {
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(serviceDAOImpl.addPlayersService(playersDTO));
+		return ResponseEntity.status(HttpStatus.CREATED).body(serviceDAOImpl.addPlayersService(id, playersDTO));
 		
 	}
 	

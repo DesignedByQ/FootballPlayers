@@ -10,8 +10,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.players.football.dto.PlayersDTO;
+import com.players.football.dto.TeamsDTO;
 import com.players.football.entity.Players;
 import com.players.football.exception.PlayersException;
 import com.players.football.repo.PlayersRepo;
@@ -26,12 +28,21 @@ public class ServiceDAOImpl implements ServiceDAO {
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	@Override
-	public PlayersDTO addPlayersService(PlayersDTO playersDTO) {
+	public PlayersDTO addPlayersService(Integer id, PlayersDTO playersDTO) {
 
-		Players pdto = playersRepo.saveAndFlush(modelMapper.map(playersDTO, Players.class));
+		Players p = playersRepo.saveAndFlush(modelMapper.map(playersDTO, Players.class));
 		
-		return modelMapper.map(pdto, PlayersDTO.class);
+		PlayersDTO pdto = modelMapper.map(p, PlayersDTO.class);
+		
+		TeamsDTO tdto = restTemplate.getForObject("http://localhost:8081/api/team/"+id, TeamsDTO.class);
+		
+		pdto.setTeamsDTO(tdto);
+		
+		return pdto;
 	}
 
 
@@ -121,22 +132,24 @@ public class ServiceDAOImpl implements ServiceDAO {
 	@Override
 	public PlayersDTO replacePlayersService(Integer sqnum, PlayersDTO playersDTO) {
 
-		Optional<Players> p = playerRepo.findById(sqnum);
+		Optional<Players> p = playersRepo.findById(sqnum);
 		
-		Optional<Team> t = teamRepo.findById(playersDTO.getTeamId());
+		//Optional<Teams> t = teamRepo.findById(playersDTO.getTeamId()); rest t
 		
-		if(p.isPresent() & t.isPresent()) {
+		if(p.isPresent()) {
 			
-			p.get().setName(playerDTO.getName());
-			p.get().setAge(playerDTO.getAge());
-			p.get().setPosition(playerDTO.getPosition());
-			p.get().setWage(playerDTO.getWage());
-			p.get().setValue(playerDTO.getValue());
-			p.get().setTeam(t.get());
+			p.get().setName(playersDTO.getName());
+			p.get().setAge(playersDTO.getAge());
+			p.get().setPosition(playersDTO.getPosition());
+			p.get().setWage(playersDTO.getWage());
+			p.get().setValue(playersDTO.getValue());
+			p.get().setTeams(playersDTO.getTeamsDTO().getTeamId());
 			
 		}
 		
 		return modelMapper.map(playersRepo.save(p.get()), PlayersDTO.class);
+		
+		//rest t to turn p teamid to actual team then return as dto
 		
 	}
 

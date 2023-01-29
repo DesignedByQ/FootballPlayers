@@ -10,7 +10,7 @@ import com.players.football.exception.PlayersException;
 
 public interface ServiceDAO {
 	
-	PlayersDTO addPlayersService(PlayersDTO playersDTO);
+	PlayersDTO addPlayersService(Integer id, PlayersDTO playersDTO);
 	
 	List<PlayersDTO> getPlayersService();
 	
