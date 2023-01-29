@@ -22,14 +22,14 @@ public class Players {
 	private String position;
 	private long wage;
 	private long value;
-	private Integer teamId;
+	private Integer teamsId;
 	
 	
-	public Integer getTeamId() {
-		return teamId;
+	public Integer getTeams() {
+		return teamsId;
 	}
-	public void setTeam(Integer teamId) {
-		this.teamId = teamId;
+	public void setTeams(Integer teamsId) {
+		this.teamsId = teamsId;
 	}
 	public Integer getSquadNumber() {
 		return squadNumber;
@@ -73,7 +73,7 @@ public class Players {
 	@Override
 	public String toString() {
 		return "Player [squadNumber=" + squadNumber + ", name=" + name + ", age=" + age + ", position=" + position
-				+ ", wage=" + wage + ", value=" + value + ", teamId=" + teamId + "]";
+				+ ", wage=" + wage + ", value=" + value + ", teamsId=" + teamsId + "]";
 	}
 	
 

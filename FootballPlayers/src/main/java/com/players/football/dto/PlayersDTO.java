@@ -13,8 +13,8 @@ public class PlayersDTO {
 	private String position;
 	private long wage;
 	private long value;
-	@NotNull(message="team ref ID must not be null")
-	private Integer teamId;
+	//@NotNull(message="teams ref ID must not be null")
+	private TeamsDTO teamsDTO;
 
 	
 	public Integer getSquadNumber() {
@@ -53,17 +53,17 @@ public class PlayersDTO {
 	public void setValue(long value) {
 		this.value = value;
 	}
-	public Integer getTeamId() {
-		return teamId;
+	public TeamsDTO getTeamsDTO() {
+		return teamsDTO;
 	}
-	public void setTeamId(Integer teamId) {
-		this.teamId = teamId;
+	public void setTeamsDTO(TeamsDTO teamsDTO) {
+		this.teamsDTO = teamsDTO;
 	}
 	
 	@Override
 	public String toString() {
 		return "PlayerDTO [squadNumber=" + squadNumber + ", name=" + name + ", age=" + age + ", position=" + position
-				+ ", wage=" + wage + ", value=" + value + ", teamId=" + teamId + "]";
+				+ ", wage=" + wage + ", value=" + value + ", teamsDTO=" + teamsDTO + "]";
 	}
 	
 	
