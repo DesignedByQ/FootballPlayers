@@ -1,6 +1,7 @@
 package com.players.football.service;
 
 import java.lang.reflect.Field;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import com.players.football.entity.Players;
 import com.players.football.exception.PlayersException;
 import com.players.football.repo.PlayersRepo;
 
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 @Service(value="serviceDAO")
 public class ServiceDAOImpl implements ServiceDAO {
@@ -30,6 +33,9 @@ public class ServiceDAOImpl implements ServiceDAO {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private DiscoveryClient client;
 	
 	@Override
 	public PlayersDTO addPlayersService(Integer id, PlayersDTO playersDTO) {
@@ -79,7 +85,9 @@ public class ServiceDAOImpl implements ServiceDAO {
 
 	@Override
 	public PlayersDTO getPlayersServiceById(Integer sqnum) throws PlayersException {
-
+		
+		
+		
 		Optional<Players> op = playersRepo.findById(sqnum);//.orElseThrow(TeamNotFoundException::new);
 		
 		PlayersDTO pdto = null;
@@ -95,6 +103,20 @@ public class ServiceDAOImpl implements ServiceDAO {
 			pdto = modelMapper.map(p, PlayersDTO.class);
 			
 		}
+		
+		String teamUri = null;//"http://localhost:8081/api/team/"+op.get().getTeams();
+		
+		List<ServiceInstance> listOfTeams = client.getInstances("FootballTeams");
+		
+		if(listOfTeams != null && !listOfTeams.isEmpty()) {
+			
+			teamUri = listOfTeams.get(0).getUri().toString();
+			
+		}
+		
+		TeamsDTO tdto = new RestTemplate().getForObject(teamUri+pdto.getTeamsDTO().getTeamId(), TeamsDTO.class);
+		
+		pdto.setTeamsDTO(tdto);
 		
 		return pdto;
 		

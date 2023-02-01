@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 
 import com.players.football.dto.PlayersDTO;
@@ -28,10 +30,16 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api")
 @Validated
+@CrossOrigin
 public class ControllerAPI {
 	
 	@Autowired
 	private ServiceDAOImpl serviceDAOImpl;
+	
+	@Autowired
+	private DiscoveryClient client;
+
+	//String teamUri;
 	
 	@PostMapping(value = "/transfer/{id}", consumes = {MediaType.ALL_VALUE})
 	public ResponseEntity<PlayersDTO> addPlayers(@Valid @PathVariable("id") Integer id, @RequestBody PlayersDTO playersDTO) {
@@ -55,7 +63,7 @@ public class ControllerAPI {
 	}
 	
 	@GetMapping(value = "/player/{sqnum}", consumes = {MediaType.ALL_VALUE})
-	public ResponseEntity<PlayersDTO> getPlayers(@PathVariable Integer sqnum) throws PlayersException{
+	public ResponseEntity<PlayersDTO> getPlayer(@PathVariable Integer sqnum) throws PlayersException{
 		
 		return ResponseEntity.status(HttpStatus.OK).body(serviceDAOImpl.getPlayersServiceById(sqnum));
 		
