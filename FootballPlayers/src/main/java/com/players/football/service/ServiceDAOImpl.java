@@ -34,8 +34,8 @@ public class ServiceDAOImpl implements ServiceDAO {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	@Autowired
-	private DiscoveryClient client;
+	//@Autowired
+	//private DiscoveryClient client;
 	
 	@Override
 	public PlayersDTO addPlayersService(Integer id, PlayersDTO playersDTO) {
@@ -44,7 +44,7 @@ public class ServiceDAOImpl implements ServiceDAO {
 		
 		PlayersDTO pdto = modelMapper.map(p, PlayersDTO.class);
 		
-		TeamsDTO tdto = restTemplate.getForObject("http://localhost:8081/api/team/"+id, TeamsDTO.class);
+		TeamsDTO tdto = restTemplate.getForObject("http://FootballTeams/api/team/"+id, TeamsDTO.class);
 		
 		pdto.setTeamsDTO(tdto);
 		
@@ -104,17 +104,19 @@ public class ServiceDAOImpl implements ServiceDAO {
 			
 		}
 		
-		String teamUri = null;//"http://localhost:8081/api/team/"+op.get().getTeams();
+		TeamsDTO tdto = restTemplate.getForObject("http://FootballTeams/api/team/" + op.get().getTeams(), TeamsDTO.class);
 		
-		List<ServiceInstance> listOfTeams = client.getInstances("FootballTeams");
+		//String teamUri = null;//"http://localhost:8081/api/team/"+op.get().getTeams();
 		
-		if(listOfTeams != null && !listOfTeams.isEmpty()) {
+		//List<ServiceInstance> listOfTeams = client.getInstances("FootballTeams");
+		
+		//if(listOfTeams != null && !listOfTeams.isEmpty()) {
 			
-			teamUri = listOfTeams.get(0).getUri().toString();
+		//	teamUri = listOfTeams.get(0).getUri().toString();
 			
-		}
+		//}
 		
-		TeamsDTO tdto = new RestTemplate().getForObject(teamUri+pdto.getTeamsDTO().getTeamId(), TeamsDTO.class);
+		//TeamsDTO tdto = new RestTemplate().getForObject(teamUri+pdto.getTeamsDTO().getTeamId(), TeamsDTO.class);
 		
 		pdto.setTeamsDTO(tdto);
 		

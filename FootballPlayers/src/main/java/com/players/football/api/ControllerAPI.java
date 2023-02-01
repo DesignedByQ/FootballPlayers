@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
+//import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 
 import com.players.football.dto.PlayersDTO;
@@ -36,8 +36,8 @@ public class ControllerAPI {
 	@Autowired
 	private ServiceDAOImpl serviceDAOImpl;
 	
-	@Autowired
-	private DiscoveryClient client;
+	//@Autowired
+	//private DiscoveryClient client;
 
 	//String teamUri;
 	
